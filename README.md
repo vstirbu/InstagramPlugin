@@ -2,7 +2,7 @@
 
 By [Vlad Stirbu](https://github.com/vstirbu).
 
-Add ability to share the content of a canvas element to Instagram.
+Adds ability to share the content of a canvas element to Instagram.
 
 ### Installing the pluggin to your project
 

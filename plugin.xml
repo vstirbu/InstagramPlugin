@@ -1,0 +1,14 @@
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.vladstirbu.cordova.instagram"
+version="0.1.0">
+    <name>Instagram</name>
+    <engines>
+        <engine name="cordova" version=">=1.8.1" />
+    </engines>
+    <asset src="www/CDVInstagramPlugin.js" target="CDVInstagramPlugin.js" />
+    <platform name="ios">
+        <!-- ios specific elements -->
+        <plugins-plist key="Instagram" string="CDVInstagramPlugin" />
+        <source-file src="CDVInstagramPlugin.h" />
+        <source-file src="CDVInstagramPlugin.m" />
+    </platform>
+</plugin>

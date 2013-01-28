@@ -26,23 +26,28 @@
 
     var cordovaRef = window.PhoneGap || window.Cordova || window.cordova; // old to new fallbacks
 
-    var isInstalled = false;
+
+    var hasCheckedInstall,
+        isAppInstalled;
+    
     window.Instagram = {
         // calls to see if the device has the Instagram app
     	isInstalled:function (callback) {
             cordovaRef.exec( function () {
-                isInstalled = true;
+                hasCheckedInstall = true;
+                isAppInstalled = true;
                 callback && callback(null, true);
             }, 
             function () {
-                isInstalled = false;
+                hasCheckedInstall = true;
+                isAppInstalled = false;
                 callback && callback(null, false);
             }, 
             "Instagram", "isInstalled", []);
         },
         share:function (canvasId, callback) {
             // sanity check 
-            if(!isInstalled) {
+            if(hasCheckedInstall && !isAppInstalled) {
                 console.log("oops, Instagram is not installed ... ");
                 return;
             }

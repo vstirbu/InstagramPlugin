@@ -22,50 +22,45 @@
     WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function () {
+(function (window,document) {
 
     var cordovaRef = window.PhoneGap || window.Cordova || window.cordova; // old to new fallbacks
 
-    function Instagram() {}
+    var isInstalled = false;
+    window.Instagram = {
+        // calls to see if the device has the Instagram app
+    	isInstalled:function (callback) {
+            cordovaRef.exec( function () {
+                isInstalled = true;
+                callback && callback(null, true);
+            }, 
+            function () {
+                isInstalled = false;
+                callback && callback(null, false);
+            }, 
+            "Instagram", "isInstalled", []);
+        },
+        share:function (canvasId, callback) {
+            // sanity check 
+            if(!isInstalled) {
+                console.log("oops, Instagram is not installed ... ");
+                return;
+            }
+            
+            var canvas = document.getElementById(canvasId);
+            if(canvas) {
+                
+                var imageData = canvas.toDataURL().replace(/data:image\/png;base64,/,"");
 
-    Instagram.prototype.isInstalled = function (callback) {
-
-        cordovaRef.exec(function () {
-            callback(null, true);
-        }, function () {
-            callback(null, false);
-        }, "Instagram", "isInstalled", []);
-
-    };
-
-    Instagram.prototype.share = function (canvasId, callback) {
-		var canvas = document.getElementById(canvasId),
-            imageData = canvas.toDataURL().replace(/data:image\/png;base64,/,"");
-
-        cordovaRef.exec(function () {
-            callback(null, true);
-        }, function () {
-            callback("error");
-        }, "Instagram", "share", [imageData]);
-
-    };
-
-    Instagram.install = function () {
-        if (!window.plugins) {
-            window.plugins = {};
+                cordovaRef.exec( function () {
+                    callback && callback(null, true);
+                }, 
+                function () {
+                    callback && callback("error");
+                }, 
+                "Instagram", "share", [imageData]);
+            }
         }
-        if (!window.plugins.instagram) {
-            window.plugins.instagram = new Instagram();
-        }
-    };
+    };  
 
-    if (cordovaRef && cordovaRef.addConstructor) {
-        cordovaRef.addConstructor(Instagram.install);
-        console.log("installed");
-    }
-    else {
-        console.log("Instagram Cordova Plugin could not be installed.");
-        return null;
-    }
-
-})();
+})(window,document);

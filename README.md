@@ -15,7 +15,7 @@ If you prefer to install the plugin manually, copy the content of the src/ios fo
 Detect if the Instagram application is installed on the device. The function isInstalled accepts a callback function as parameter:
 
 ```javascript
-window.plugins.instagram.isInstalled(function (err, installed) {
+Instagram.isInstalled(function (err, installed) {
     if (installed) {
         console.log("Instagram is installed");
     } else {
@@ -27,7 +27,7 @@ window.plugins.instagram.isInstalled(function (err, installed) {
 Share the content of a canvas element. The function share accepts the canvas element id and a callback function as parameters:
 
 ```javascript
-window.plugins.instagram.share(canvasId, function (err) {
+Instagram.share(canvasId, function (err) {
     if (err) {
         console.log("not shared");
     } else {

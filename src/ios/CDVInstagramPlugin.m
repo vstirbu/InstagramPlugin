@@ -62,7 +62,7 @@
         NSData *imageObj = [NSData dataFromBase64String:objectAtIndex0];
         
         NSString *tmpDir = NSTemporaryDirectory();
-        NSString *path = [tmpDir stringByAppendingPathComponent:@"haiku.igo"];
+        NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
         
         [imageObj writeToFile:path atomically:true];
         
@@ -70,7 +70,6 @@
         [documentInteractionController retain];
         
         documentInteractionController.UTI = @"com.instagram.exclusivegram";
-        documentInteractionController.annotation = [NSDictionary dictionaryWithObject:@"#foldpass #haiku" forKey:@"InstagramCaption"];
         
         if(! [documentInteractionController presentPreviewAnimated:YES]){
             NSLog(@"ERROR in presenting preview %@", self.webView.delegate);

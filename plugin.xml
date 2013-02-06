@@ -1,14 +1,32 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.vladstirbu.cordova.instagram"
 version="0.1.0">
-    <name>Instagram</name>
-    <engines>
-        <engine name="cordova" version=">=1.8.1" />
-    </engines>
-    <asset src="www/CDVInstagramPlugin.js" target="CDVInstagramPlugin.js" />
-    <platform name="ios">
-        <!-- ios specific elements -->
-        <plugins-plist key="Instagram" string="CDVInstagramPlugin" />
-        <source-file src="CDVInstagramPlugin.h" />
-        <source-file src="CDVInstagramPlugin.m" />
-    </platform>
+  <name>Instagram</name>
+  
+  <engines>
+    <engine name="cordova" version=">=1.8.1" />
+  </engines>
+  
+  <asset src="www/CDVInstagramPlugin.js" target="CDVInstagramPlugin.js" />
+  
+  <platform name="android">
+    
+    <!-- android specific elements -->
+    <config-file target="res/xml/config.xml" parent="/cordova/plugins">
+      <plugin name="Instagram" value="com.vladstirbu.cordova.CDVInstagramPlugin" />
+    </config-file>
+    
+    <config-file target="res/xml/plugins.xml" parent="/plugins">
+      <plugin name="Instagram" value="com.vladstirbu.cordova.CDVInstagramPlugin" />
+    </config-file>
+    
+    <source-file src="src/android/CDVInstagramPlugin.java" target-dir="src/com/vladstirbu/cordova" />
+  </platform>
+  
+  <platform name="ios">
+    <!-- ios specific elements -->
+    <plugins-plist key="Instagram" string="CDVInstagramPlugin" />
+    
+    <source-file src="CDVInstagramPlugin.h" />
+    <source-file src="CDVInstagramPlugin.m" />
+  </platform>
 </plugin>

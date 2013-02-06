@@ -2,11 +2,11 @@
 
 By [Vlad Stirbu](https://github.com/vstirbu).
 
-Adds ability to share the content of a canvas element to Instagram.
+Adds ability to share the content of a canvas element using the Instagram application for iOS and Android.
 
-### Installing the pluggin to your project
+### Installing the plugin to your project
 
-The simplest way to install the plugin is via the [pluginstall](http://github.com/alunny/pluginstall) tool.
+The simplest way to install the plugin is via the [plugman](https://github.com/imhotep/plugman) tool.
 
 If you prefer to install the plugin manually, copy the content of the src/ios folder in the Plugins directory and the content of the www folder in your www folder. Add the plugin to your Cordova.plist, in Plugins section: the key is ```Instagram``` and value is ```CDVInstagramPlugin```.
 
@@ -38,7 +38,7 @@ Instagram.share(canvasId, function (err) {
 
 ### The MIT License
 
-Copyright © 2012 Vlad Stirbu.
+Copyright © 2013 Vlad Stirbu.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

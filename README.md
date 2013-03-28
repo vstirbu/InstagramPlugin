@@ -2,7 +2,7 @@
 
 By [Vlad Stirbu](https://github.com/vstirbu).
 
-Adds ability to share the content of a canvas element using the Instagram application for iOS and Android.
+Adds ability to share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.
 
 ### Installing the plugin to your project
 
@@ -24,10 +24,10 @@ Instagram.isInstalled(function (err, installed) {
 });
 ```
 
-Share the content of a canvas element. The function share accepts the canvas element id and a callback function as parameters:
+Share the content of a canvas element or a base64 dataURL image. The function share accepts a string, corresponding to the canvas element id or the dataURL, and a callback function as parameters:
 
 ```javascript
-Instagram.share(canvasId, function (err) {
+Instagram.share(canvasIdOrDataUrl, function (err) {
     if (err) {
         console.log("not shared");
     } else {
@@ -35,6 +35,10 @@ Instagram.share(canvasId, function (err) {
     }
 });
 ```
+
+### Android Quirks:
+
+Older versions of Android (2.x-3.x) do not have proper support for toDataURL on canvas elements. You can still get the canvas content as dataURL following these [instructions](http://jbkflex.wordpress.com/2012/12/21/html5-canvas-todataurl-support-for-android-devices-working-phonegap-2-2-0-plugin/). Pass the dataUrl instead of the canvas id to ```share```.
 
 ### The MIT License
 

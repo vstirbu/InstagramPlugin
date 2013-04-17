@@ -28,8 +28,11 @@
 
 @implementation CDVInstagramPlugin
 
+@synthesize toInstagram;
+@synthesize callbackId;
+
 -(void)isInstalled:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options {
-    NSString *callbackId = [arguments pop];
+    self.callbackId = [arguments pop];
     
     CDVPluginResult *result;
     
@@ -44,12 +47,11 @@
         [self writeJavascript: [result toErrorCallbackString:callbackId]];
     }
     
-
-    
 }
 
 - (void)share:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options {
-    NSString    *callbackId     = [arguments pop];
+    self.callbackId = [arguments pop];
+    self.toInstagram = FALSE;
     NSString    *objectAtIndex0 = [arguments objectAtIndex:0];
     
     CDVPluginResult *result;
@@ -70,21 +72,32 @@
         [documentInteractionController retain];
         
         documentInteractionController.UTI = @"com.instagram.exclusivegram";
+        documentInteractionController.delegate = self;
         
-        if(! [documentInteractionController presentPreviewAnimated:YES]){
-            NSLog(@"ERROR in presenting preview %@", self.webView.delegate);
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:2];
-            
-            [self writeJavascript:[result toErrorCallbackString:callbackId]];
-        }
         [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:self.webView animated:YES];
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         
-        [self writeJavascript:[result toSuccessCallbackString:callbackId]];
     } else {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
         
         [self writeJavascript:[result toErrorCallbackString:callbackId]];
+    }
+}
+
+- (void) documentInteractionController: (UIDocumentInteractionController *) controller willBeginSendingToApplication: (NSString *) application {
+    self.toInstagram = TRUE;
+}
+
+- (void) documentInteractionControllerDidDismissOpenInMenu: (UIDocumentInteractionController *) controller {
+    CDVPluginResult *result;
+    
+    if (self.toInstagram) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        
+        [self writeJavascript:[result toSuccessCallbackString: self.callbackId]];
+    } else {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:2];
+        
+        [self writeJavascript:[result toErrorCallbackString: self.callbackId]];
     }
 }
 

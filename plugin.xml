@@ -1,5 +1,7 @@
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.vladstirbu.cordova.instagram"
-version="0.1.0">
+<pluginxmlns="http://www.phonegap.com/ns/plugins/1.0"
+  id="com.vladstirbu.cordova.instagram"
+  version="0.2.1">
+  
   <name>Instagram</name>
   
   <engines>

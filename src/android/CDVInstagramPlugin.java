@@ -25,6 +25,7 @@
 package com.vladstirbu.cordova;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,6 +46,14 @@ import android.util.Log;
 
 @TargetApi(Build.VERSION_CODES.FROYO)
 public class CDVInstagramPlugin extends CordovaPlugin {
+
+    private static final FilenameFilter OLD_IMAGE_FILTER = new FilenameFilter() {
+        @Override
+        public boolean accept(File dir, String name) {
+            return name.startsWith("instagram");
+        }
+    };
+
 	CallbackContext cbContext;
 	
 	@Override
@@ -77,16 +86,22 @@ public class CDVInstagramPlugin extends CordovaPlugin {
         if (imageString != null && imageString.length() > 0) { 
         	byte[] imageData = Base64.decode(imageString, 0);
         	
-        	FileOutputStream os = null;
+        	File file = null;  
+            FileOutputStream os = null;
         	
-        	File filePath = new File(this.webView.getContext().getExternalFilesDir(null), "instagram.png");
-			
-			try {
-				os = new FileOutputStream(filePath, true);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        	File parentDir = this.webView.getContext().getExternalFilesDir(null);
+            File[] oldImages = parentDir.listFiles(OLD_IMAGE_FILTER);
+            for (File oldImage : oldImages) {
+                oldImage.delete();
+            }
+
+            try {
+                file = File.createTempFile("instagram", ".png", parentDir);
+                os = new FileOutputStream(file, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         	try {
         		os.write(imageData);
 				os.flush();
@@ -98,7 +113,7 @@ public class CDVInstagramPlugin extends CordovaPlugin {
         	
         	Intent shareIntent = new Intent(Intent.ACTION_SEND);
         	shareIntent.setType("image/*");
-        	shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filePath));
+        	shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file));
         	shareIntent.setPackage("com.instagram.android");
         	
         	this.cordova.startActivityForResult((CordovaPlugin) this, shareIntent, 12345);

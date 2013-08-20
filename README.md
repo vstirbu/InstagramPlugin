@@ -6,7 +6,7 @@ Adds ability to share the content of a canvas element or a dataUrl encoded image
 
 ### Installing the plugin to your project
 
-The simplest way to install the plugin is via the [plugman](https://github.com/imhotep/plugman) tool.
+The simplest way to install the plugin is via the [plugman](https://github.com/apache/cordova-plugman) tool.
 
 If you prefer to install the plugin manually, copy the content of the src/ios folder in the Plugins directory and the content of the www folder in your www folder. Add the plugin to your Cordova.plist, in Plugins section: the key is ```Instagram``` and value is ```CDVInstagramPlugin```.
 

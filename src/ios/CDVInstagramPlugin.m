@@ -31,8 +31,9 @@
 @synthesize toInstagram;
 @synthesize callbackId;
 
--(void)isInstalled:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options {
-    self.callbackId = [arguments pop];
+-(void)isInstalled:(CDVInvokedUrlCommand*)command {
+    NSMutableDictionary* options = (NSMutableDictionary*)[command argumentAtIndex:0];
+    self.callbackId = command.callbackId;
     
     CDVPluginResult *result;
     
@@ -49,8 +50,9 @@
     
 }
 
-- (void)share:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options {
-    self.callbackId = [arguments pop];
+- (void)share:(CDVInvokedUrlCommand*)command {
+    NSMutableDictionary* options = (NSMutableDictionary*)[command argumentAtIndex:0];
+    self.callbackId = command.callbackId;
     self.toInstagram = FALSE;
     NSString    *objectAtIndex0 = [arguments objectAtIndex:0];
     

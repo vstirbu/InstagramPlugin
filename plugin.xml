@@ -5,13 +5,22 @@
   version="0.2.1">
   
   <name>Instagram</name>
+
+  <js-module src="www/CDVInstagramPlugin.js" name="InstagramPlugin">
+        <clobbers target="CDVInstagramPlugin" />
+  </js-module>
+
+  <engines>
+      <engine name="cordova" version=">=3.0.0" />
+  </engines>
   
-  <asset src="www/CDVInstagramPlugin.js" target="js/CDVInstagramPlugin.js" />
-  
+  <!-- ios -->
   <platform name="ios">
     <!-- ios specific elements -->
-    <config-file target="config.xml" parent="plugins">
-      <plugin name="InstagramPlugin" value="CDVInstagramPlugin" />
+    <config-file target="config.xml" parent="*">
+      <feature name="InstagramPlugin">
+          <param name="ios-package" value="CDVInstagramPlugin"/>
+      </feature>
     </config-file>
 
     <header-file src="src/ios/CDVInstagramPlugin.h" target-dir="CDVInstagramPlugin" />

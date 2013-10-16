@@ -51,10 +51,9 @@
 }
 
 - (void)share:(CDVInvokedUrlCommand*)command {
-    NSMutableDictionary* options = (NSMutableDictionary*)[command argumentAtIndex:0];
     self.callbackId = command.callbackId;
     self.toInstagram = FALSE;
-    NSString    *objectAtIndex0 = [arguments objectAtIndex:0];
+    NSString    *objectAtIndex0 = [command argumentAtIndex:0];
     
     CDVPluginResult *result;
     
@@ -71,7 +70,6 @@
         [imageObj writeToFile:path atomically:true];
         
         UIDocumentInteractionController* documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
-        [documentInteractionController retain];
         
         documentInteractionController.UTI = @"com.instagram.exclusivegram";
         documentInteractionController.delegate = self;

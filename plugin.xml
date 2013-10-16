@@ -17,8 +17,8 @@
   <!-- ios -->
   <platform name="ios">
     <!-- ios specific elements -->
-    <config-file target="config.xml" parent="*">
-      <feature name="InstagramPlugin">
+    <config-file target="config.xml" parent="/*">
+      <feature name="Instagram">
           <param name="ios-package" value="CDVInstagramPlugin"/>
       </feature>
     </config-file>

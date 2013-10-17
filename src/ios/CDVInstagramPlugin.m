@@ -23,28 +23,24 @@
 */
 
 #import <Cordova/CDV.h>
-
 #import "CDVInstagramPlugin.h"
 
 @implementation CDVInstagramPlugin
 
 @synthesize toInstagram;
 @synthesize callbackId;
+@synthesize interactionController;
 
 -(void)isInstalled:(CDVInvokedUrlCommand*)command {
-    NSMutableDictionary* options = (NSMutableDictionary*)[command argumentAtIndex:0];
     self.callbackId = command.callbackId;
-    
     CDVPluginResult *result;
     
     NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];    
         [self writeJavascript: [result toSuccessCallbackString:callbackId]];
     } else {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-        
         [self writeJavascript: [result toErrorCallbackString:callbackId]];
     }
     
@@ -59,26 +55,21 @@
     
     NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
-        //imageToUpload is a file path with .ig file extension
         NSLog(@"open in instagram");
         
-        NSData *imageObj = [NSData dataFromBase64String:objectAtIndex0];
-        
+        NSData *imageObj = [NSData dataFromBase64String:objectAtIndex0];      
         NSString *tmpDir = NSTemporaryDirectory();
         NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
         
         [imageObj writeToFile:path atomically:true];
         
-        UIDocumentInteractionController* documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
-        
-        documentInteractionController.UTI = @"com.instagram.exclusivegram";
-        documentInteractionController.delegate = self;
-        
-        [documentInteractionController presentOpenInMenuFromRect:CGRectZero inView:self.webView animated:YES];
+        self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
+        self.interactionController .UTI = @"com.instagram.exclusivegram";
+        self.interactionController .delegate = self;
+        [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:self.webView animated:YES];
         
     } else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
-        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];     
         [self writeJavascript:[result toErrorCallbackString:callbackId]];
     }
 }
@@ -92,11 +83,9 @@
     
     if (self.toInstagram) {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        
         [self writeJavascript:[result toSuccessCallbackString: self.callbackId]];
     } else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:2];
-        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:2];       
         [self writeJavascript:[result toErrorCallbackString: self.callbackId]];
     }
 }

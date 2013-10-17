@@ -30,6 +30,7 @@
 
 @property (nonatomic) Boolean toInstagram;
 @property (nonatomic, strong) IBOutlet NSString *callbackId;
+@property (nonatomic) UIDocumentInteractionController *interactionController;
 
 - (void)isInstalled:(CDVInvokedUrlCommand*)command;
 - (void)share:(CDVInvokedUrlCommand*)command;

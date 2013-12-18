@@ -22,57 +22,56 @@
     WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function (window, document) {
+var exec = require('cordova/exec');
 
-  var cordovaRef = window.PhoneGap || window.Cordova || window.cordova; // old to new fallbacks
+var hasCheckedInstall,
+    isAppInstalled;
 
-  var hasCheckedInstall,
-      isAppInstalled;
+function shareDataUrl(dataUrl, callback) {
+  var imageData = dataUrl.replace(/data:image\/(png|jpeg);base64,/, "");
 
-  function shareDataUrl(dataUrl, callback) {
-    var imageData = dataUrl.replace(/data:image\/(png|jpeg);base64,/, "");
+  exec(function () {
+    callback && callback(null, true);
+  },
 
+  function () {
+    callback && callback("error");
+  }, "Instagram", "share", [imageData]);
+}
+
+var Plugin = {
+  // calls to see if the device has the Instagram app
+  isInstalled: function (callback) {
     cordovaRef.exec(function () {
+      hasCheckedInstall = true;
+      isAppInstalled = true;
       callback && callback(null, true);
     },
 
     function () {
-      callback && callback("error");
-    }, "Instagram", "share", [imageData]);
-  }
-
-  window.Instagram = {
-    // calls to see if the device has the Instagram app
-    isInstalled: function (callback) {
-      cordovaRef.exec(function () {
-        hasCheckedInstall = true;
-        isAppInstalled = true;
-        callback && callback(null, true);
-      },
-
-      function () {
-        hasCheckedInstall = true;
-        isAppInstalled = false;
-        callback && callback(null, false);
-      }, "Instagram", "isInstalled", []);
-    },
-    share: function (data, callback) {
-      // sanity check 
-      if (hasCheckedInstall && !isAppInstalled) {
-        console.log("oops, Instagram is not installed ... ");
-        return callback && callback("oops, Instagram is not installed ... ");
-      }
-
-      var canvas = document.getElementById(data),
-          magic = "data:image";
-      
-      if (canvas) {
-        shareDataUrl(canvas.toDataURL(), callback);
-      }
-      else if (data.slice(0, magic.length) == magic) {
-        shareDataUrl(data, callback);
-      }
+      hasCheckedInstall = true;
+      isAppInstalled = false;
+      callback && callback(null, false);
+    }, "Instagram", "isInstalled", []);
+  },
+  share: function (data, callback) {
+    // sanity check 
+    if (hasCheckedInstall && !isAppInstalled) {
+      console.log("oops, Instagram is not installed ... ");
+      return callback && callback("oops, Instagram is not installed ... ");
     }
-  };
 
-})(window, document);
+    var canvas = document.getElementById(data),
+        magic = "data:image";
+    
+    if (canvas) {
+      shareDataUrl(canvas.toDataURL(), callback);
+    }
+    else if (data.slice(0, magic.length) == magic) {
+      shareDataUrl(data, callback);
+    }
+  }
+};
+
+module.exports = Plugin;
+

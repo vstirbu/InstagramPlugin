@@ -7,7 +7,7 @@
   <name>Instagram</name>
 
   <js-module src="www/CDVInstagramPlugin.js" name="InstagramPlugin">
-        <clobbers target="CDVInstagramPlugin" />
+        <clobbers target="Instagram" />
   </js-module>
 
   <engines>
@@ -17,7 +17,7 @@
   <!-- android -->
   <platform name="android">
     <!-- android specific elements -->
-    <config-file target="res/xml/config.xml" parent="/cordova/plugins">
+    <config-file target="res/xml/config.xml" parent="/*">
       <feature name="Instagram">
         <param name="android-package" value="com.vladstirbu.cordova.CDVInstagramPlugin" />
        </feature>

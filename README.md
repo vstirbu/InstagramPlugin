@@ -45,3 +45,7 @@ Older versions of Android (2.x-3.x) do not have proper support for toDataURL on 
 ### License
 
 The plugin is available under MIT license.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/vstirbu/instagramplugin/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+

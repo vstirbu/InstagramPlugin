@@ -42,7 +42,7 @@ function shareDataUrl(dataUrl, callback) {
 var Plugin = {
   // calls to see if the device has the Instagram app
   isInstalled: function (callback) {
-    cordovaRef.exec(function () {
+    exec(function () {
       hasCheckedInstall = true;
       isAppInstalled = true;
       callback && callback(null, true);

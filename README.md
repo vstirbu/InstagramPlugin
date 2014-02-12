@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/vstirbu/instagramplugin.png?label=ready)](https://waffle.io/vstirbu/instagramplugin)
 # Instagram plugin for Cordova
 
 By [Vlad Stirbu](https://github.com/vstirbu).

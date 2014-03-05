@@ -1,9 +1,10 @@
-[![Stories in Ready](https://badge.waffle.io/vstirbu/instagramplugin.png?label=ready)](https://waffle.io/vstirbu/instagramplugin)
 # Instagram plugin for Cordova
 
 By [Vlad Stirbu](https://github.com/vstirbu).
 
 Adds ability to share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.
+
+[![GitHub version](https://badge.fury.io/gh/vstirbu%2FInstagramPlugin.png)](http://badge.fury.io/gh/vstirbu%2FInstagramPlugin) [![Stories in Ready](https://badge.waffle.io/vstirbu/instagramplugin.png?label=ready)](https://waffle.io/vstirbu/instagramplugin)
 
 ### Installing the plugin to your project
 
@@ -46,7 +47,4 @@ Older versions of Android (2.x-3.x) do not have proper support for toDataURL on 
 ### License
 
 The plugin is available under MIT license.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/vstirbu/instagramplugin/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

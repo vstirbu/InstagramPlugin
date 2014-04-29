@@ -1,6 +1,6 @@
 /*
     The MIT License (MIT)
-    Copyright (c) 2013 Vlad Stirbu
+    Copyright (c) 2013 - 2014 Vlad Stirbu
     
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
@@ -27,7 +27,7 @@ var exec = require('cordova/exec');
 var hasCheckedInstall,
     isAppInstalled;
 
-function shareDataUrl(dataUrl, callback) {
+function shareDataUrl(dataUrl, caption, callback) {
   var imageData = dataUrl.replace(/data:image\/(png|jpeg);base64,/, "");
 
   exec(function () {
@@ -36,7 +36,7 @@ function shareDataUrl(dataUrl, callback) {
 
   function () {
     callback && callback("error");
-  }, "Instagram", "share", [imageData]);
+  }, "Instagram", "share", [imageData, caption]);
 }
 
 var Plugin = {
@@ -54,7 +54,24 @@ var Plugin = {
       callback && callback(null, false);
     }, "Instagram", "isInstalled", []);
   },
-  share: function (data, callback) {
+  share: function () {
+    var data,
+        caption,
+        callback;
+    
+    switch(arguments.length) {
+    case 2:
+      data = arguments[0];
+      callback = arguments[1];
+      break;
+    case 3:
+      data = arguments[0];
+      caption = arguments[1];
+      callback = arguments[2];
+      break;
+    default:
+    }
+    
     // sanity check 
     if (hasCheckedInstall && !isAppInstalled) {
       console.log("oops, Instagram is not installed ... ");
@@ -65,10 +82,10 @@ var Plugin = {
         magic = "data:image";
     
     if (canvas) {
-      shareDataUrl(canvas.toDataURL(), callback);
+      shareDataUrl(canvas.toDataURL(), caption, callback);
     }
     else if (data.slice(0, magic.length) == magic) {
-      shareDataUrl(data, callback);
+      shareDataUrl(data, caption, callback);
     }
   }
 };

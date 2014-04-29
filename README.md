@@ -28,7 +28,19 @@ Instagram.isInstalled(function (err, installed) {
 });
 ```
 
-Share the content of a canvas element or a base64 dataURL image. The function share accepts a string, corresponding to the canvas element id or the dataURL, and a callback function as parameters:
+Share the content of a canvas element or a base64 dataURL image. The function share accepts a string, corresponding to the canvas element id or the dataURL, an optional caption, and a callback function as parameters:
+
+```javascript
+Instagram.share(canvasIdOrDataUrl, caption, function (err) {
+    if (err) {
+        console.log("not shared");
+    } else {
+        console.log("shared");
+    }
+});
+```
+
+or:
 
 ```javascript
 Instagram.share(canvasIdOrDataUrl, function (err) {

@@ -25,6 +25,8 @@
 #import <Cordova/CDV.h>
 #import "CDVInstagramPlugin.h"
 
+static NSString *InstagramId = @"com.burbn.instagram";
+
 @implementation CDVInstagramPlugin
 
 @synthesize toInstagram;
@@ -79,7 +81,9 @@
 }
 
 - (void) documentInteractionController: (UIDocumentInteractionController *) controller willBeginSendingToApplication: (NSString *) application {
-    self.toInstagram = TRUE;
+    if ([application isEqualToString:InstagramId]) {
+        self.toInstagram = TRUE;
+    }
 }
 
 - (void) documentInteractionControllerDidDismissOpenInMenu: (UIDocumentInteractionController *) controller {

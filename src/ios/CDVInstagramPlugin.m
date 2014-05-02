@@ -1,6 +1,6 @@
 /*
     The MIT License (MIT)
-    Copyright (c) 2013 Vlad Stirbu
+    Copyright (c) 2013 - 2014 Vlad Stirbu
     
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
@@ -50,6 +50,7 @@
     self.callbackId = command.callbackId;
     self.toInstagram = FALSE;
     NSString    *objectAtIndex0 = [command argumentAtIndex:0];
+    NSString    *caption = [command argumentAtIndex:1];
     
     CDVPluginResult *result;
     
@@ -65,6 +66,9 @@
         
         self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
         self.interactionController .UTI = @"com.instagram.exclusivegram";
+        if (caption) {
+            self.interactionController .annotation = @{@"InstagramCaption" : caption};
+        }
         self.interactionController .delegate = self;
         [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:self.webView animated:YES];
         

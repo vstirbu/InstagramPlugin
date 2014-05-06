@@ -34,8 +34,8 @@ function shareDataUrl(dataUrl, caption, callback) {
     callback && callback(null, true);
   },
 
-  function () {
-    callback && callback("error");
+  function (err) {
+    callback && callback(err);
   }, "Instagram", "share", [imageData, caption]);
 }
 

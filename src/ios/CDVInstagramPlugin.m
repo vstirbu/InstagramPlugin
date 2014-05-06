@@ -39,11 +39,11 @@ static NSString *InstagramId = @"com.burbn.instagram";
     
     NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];    
-        [self writeJavascript: [result toSuccessCallbackString:callbackId]];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     } else {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-        [self writeJavascript: [result toErrorCallbackString:callbackId]];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     }
     
 }
@@ -60,7 +60,7 @@ static NSString *InstagramId = @"com.burbn.instagram";
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
         NSLog(@"open in instagram");
         
-        NSData *imageObj = [NSData dataFromBase64String:objectAtIndex0];      
+        NSData *imageObj = [NSData dataFromBase64String:objectAtIndex0];
         NSString *tmpDir = NSTemporaryDirectory();
         NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
         
@@ -75,8 +75,8 @@ static NSString *InstagramId = @"com.burbn.instagram";
         [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:self.webView animated:YES];
         
     } else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];     
-        [self writeJavascript:[result toErrorCallbackString:callbackId]];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     }
 }
 
@@ -91,10 +91,10 @@ static NSString *InstagramId = @"com.burbn.instagram";
     
     if (self.toInstagram) {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        [self writeJavascript:[result toSuccessCallbackString: self.callbackId]];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     } else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:2];       
-        [self writeJavascript:[result toErrorCallbackString: self.callbackId]];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:2];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     }
 }
 

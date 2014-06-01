@@ -52,6 +52,8 @@ Instagram.share(canvasIdOrDataUrl, function (err) {
 });
 ```
 
+A very basic application that uses the plugin can be found [here](https://github.com/vstirbu/instagramplugin-example).
+
 ### Quirks:
 
 #### Android

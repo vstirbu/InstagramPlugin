@@ -58,7 +58,7 @@ A very basic application that uses the plugin can be found [here](https://github
 
 #### Android
 
-* Passing caption in addition to sharing image is supported on Instagram Android application with [version greater than 6.1.0](http://instagram.com/developer/mobile-sharing/android-intents/#).
+* Passing caption in addition to sharing image requires Instagram Android application [version 6.1.0 or higher](http://instagram.com/developer/mobile-sharing/android-intents/#).
 * Older versions of Android (2.x-3.x) do not have proper support for toDataURL on canvas elements. You can still get the canvas content as dataURL following these [instructions](http://jbkflex.wordpress.com/2012/12/21/html5-canvas-todataurl-support-for-android-devices-working-phonegap-2-2-0-plugin/). Pass the dataUrl instead of the canvas id to ```share```.
 
 #### iOS

@@ -65,6 +65,10 @@ A very basic application that uses the plugin can be found [here](https://github
 
 * Althought the plugin follows the [instructions](http://instagram.com/developer/iphone-hooks/) to show only Instagram in the document interaction controller, there are [reports](https://github.com/vstirbu/InstagramPlugin/issues/23) that other apps appear in the list.
 
+### Recipes
+
+* Sharing image when knowing the [file url](https://github.com/vstirbu/InstagramPlugin/issues/29).
+
 ### License
 
 The plugin is available under MIT license.

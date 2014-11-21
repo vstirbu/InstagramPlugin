@@ -77,7 +77,7 @@ public class CDVInstagramPlugin extends CordovaPlugin {
 	private void isInstalled() {
 		try {
 			this.webView.getContext().getPackageManager().getApplicationInfo("com.instagram.android", 0);
-			this.cbContext.success();
+			this.cbContext.success(this.webView.getContext().getPackageManager().getPackageInfo("com.instagram.android", 0).versionName);
 		} catch (PackageManager.NameNotFoundException e) {
 			this.cbContext.error("Application not installed");
 		}

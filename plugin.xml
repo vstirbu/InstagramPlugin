@@ -2,8 +2,8 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="com.vladstirbu.cordova.instagram"
-  version="0.4.0">
-  
+  version="0.4.1">
+
   <name>Instagram</name>
 
   <description>Share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.</description>
@@ -17,7 +17,7 @@
   <engines>
       <engine name="cordova" version=">=3.0.0" />
   </engines>
-  
+
   <!-- android -->
   <platform name="android">
     <!-- android specific elements -->
@@ -26,10 +26,10 @@
         <param name="android-package" value="com.vladstirbu.cordova.CDVInstagramPlugin" />
        </feature>
     </config-file>
-    
+
     <source-file src="src/android/CDVInstagramPlugin.java" target-dir="src/com/vladstirbu/cordova" />
   </platform>
-  
+
   <!-- ios -->
   <platform name="ios">
     <!-- ios specific elements -->

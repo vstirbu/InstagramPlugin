@@ -21,7 +21,7 @@ Detect if the Instagram application is installed on the device. The function isI
 ```javascript
 Instagram.isInstalled(function (err, installed) {
     if (installed) {
-        console.log("Instagram is installed");
+        console.log("Instagram is", installed); // installed app version on Android
     } else {
         console.log("Instagram is not installed");
     }
@@ -72,4 +72,3 @@ A very basic application that uses the plugin can be found [here](https://github
 ### License
 
 The plugin is available under MIT license.
-

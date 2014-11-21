@@ -42,10 +42,10 @@ function shareDataUrl(dataUrl, caption, callback) {
 var Plugin = {
   // calls to see if the device has the Instagram app
   isInstalled: function (callback) {
-    exec(function () {
+    exec(function (version) {
       hasCheckedInstall = true;
       isAppInstalled = true;
-      callback && callback(null, true);
+      callback && callback(null, version ? version : true);
     },
 
     function () {

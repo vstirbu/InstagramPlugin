@@ -62,6 +62,7 @@ var Plugin = {
     switch(arguments.length) {
     case 2:
       data = arguments[0];
+      caption = '';
       callback = arguments[1];
       break;
     case 3:

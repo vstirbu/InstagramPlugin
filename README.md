@@ -1,5 +1,7 @@
 # Instagram plugin for Cordova
 
+[![Join the chat at https://gitter.im/vstirbu/InstagramPlugin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vstirbu/InstagramPlugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 By [Vlad Stirbu](https://github.com/vstirbu).
 
 Adds ability to share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.

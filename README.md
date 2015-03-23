@@ -55,6 +55,10 @@ Instagram.share(canvasIdOrDataUrl, function (err) {
 
 A very basic application that uses the plugin can be found [here](https://github.com/vstirbu/instagramplugin-example).
 
+### AngularJS
+
+The plugin is included in [ngCordova](http://ngcordova.com/docs/plugins/instagram/).
+
 ### Quirks:
 
 #### Android

@@ -68,7 +68,7 @@ The plugin is included in [ngCordova](http://ngcordova.com/docs/plugins/instagra
 
 #### iOS
 
-* Althought the plugin follows the [instructions](http://instagram.com/developer/iphone-hooks/) to show only Instagram in the document interaction controller, there are [reports](https://github.com/vstirbu/InstagramPlugin/issues/23) that other apps appear in the list.
+* Although the plugin follows the [instructions](http://instagram.com/developer/iphone-hooks/) to show only Instagram in the document interaction controller, there are [reports](https://github.com/vstirbu/InstagramPlugin/issues/23) that other apps appear in the list.
 
 ### Recipes
 

@@ -1,0 +1,33 @@
+{
+  "name": "cordova-instagram-plugin",
+  "version": "0.4.1",
+  "description": "Share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.",
+  "cordova": {
+    "id": "cordova-instagram-plugin",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vstirbu/InstagramPlugin.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Vlad Stirbu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vstirbu/InstagramPlugin/issues"
+  },
+  "homepage": "https://github.com/vstirbu/InstagramPlugin#readme"
+}

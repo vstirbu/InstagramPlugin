@@ -9,10 +9,16 @@ Adds ability to share the content of a canvas element or a dataUrl encoded image
 
 ### Installing the plugin to your project
 
-In your project directory:
+If you use `cordova-cli` newer than 5.0:
 
 ```bash
-cordova plugins add https://github.com/vstirbu/InstagramPlugin
+cordova plugin add cordova-instagram-plugin
+```
+
+or, for older versions:
+
+```bash
+cordova plugin add https://github.com/vstirbu/InstagramPlugin
 ```
 
 ### Instagram plugin JavaScript API

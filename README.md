@@ -35,7 +35,9 @@ Instagram.isInstalled(function (err, installed) {
 });
 ```
 
-Share the content of a canvas element or a base64 dataURL image. The function share accepts a string, corresponding to the canvas element id or the dataURL, an optional caption, and a callback function as parameters:
+Share the content of a canvas element or a base64 dataURL __png__ image. The function share accepts a string, corresponding to the canvas element id or the dataURL, an optional caption, and a callback function as parameters:
+
+__DEPRECATION NOTE__: [Instagram](http://developers.instagram.com/post/125972775561/removing-pre-filled-captions-from-mobile-sharing) app stopped accepting pre-filled captions on both iOS and Android.
 
 ```javascript
 Instagram.share(canvasIdOrDataUrl, caption, function (err) {

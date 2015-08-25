@@ -1,7 +1,7 @@
 /*
     The MIT License (MIT)
     Copyright (c) 2013 - 2014 Vlad Stirbu
-    
+
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
     "Software"), to deal in the Software without restriction, including
@@ -9,10 +9,10 @@
     distribute, sublicense, and/or sell copies of the Software, and to
     permit persons to whom the Software is furnished to do so, subject to
     the following conditions:
-    
+
     The above copyright notice and this permission notice shall be
     included in all copies or substantial portions of the Software.
-    
+
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -31,6 +31,10 @@ function shareDataUrl(dataUrl, caption, callback) {
   var imageData = dataUrl.replace(/data:image\/(png|jpeg);base64,/, "");
 
   exec(function () {
+    if (cordova && cordova.plugins && cordova.plugins.clipboard && caption !== '') {
+      cordova.plugins.clipboard.copy(caption);
+    }
+
     callback && callback(null, true);
   },
 
@@ -58,7 +62,7 @@ var Plugin = {
     var data,
         caption,
         callback;
-    
+
     switch(arguments.length) {
     case 2:
       data = arguments[0];
@@ -72,8 +76,8 @@ var Plugin = {
       break;
     default:
     }
-    
-    // sanity check 
+
+    // sanity check
     if (hasCheckedInstall && !isAppInstalled) {
       console.log("oops, Instagram is not installed ... ");
       return callback && callback("oops, Instagram is not installed ... ");
@@ -81,7 +85,7 @@ var Plugin = {
 
     var canvas = document.getElementById(data),
         magic = "data:image";
-    
+
     if (canvas) {
       shareDataUrl(canvas.toDataURL(), caption, callback);
     }
@@ -92,4 +96,3 @@ var Plugin = {
 };
 
 module.exports = Plugin;
-

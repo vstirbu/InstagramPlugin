@@ -92,6 +92,10 @@ var Plugin = {
     else if (data.slice(0, magic.length) == magic) {
       shareDataUrl(data, caption, callback);
     }
+    else
+    {
+      console.log('oops, Instagram image data lacks magic.')
+    }
   }
 };
 

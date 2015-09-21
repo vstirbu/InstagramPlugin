@@ -94,7 +94,7 @@ var Plugin = {
     }
     else
     {
-      console.log('oops, Instagram image data lacks magic.')
+      console.log("oops, Instagram image data string has to start with 'data:image'.")
     }
   }
 };

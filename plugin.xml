@@ -44,6 +44,13 @@
       </feature>
     </config-file>
 
+    <!-- custom URLs need to be white listed on iOS 9 -->
+    <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+      <array>
+        <string>instagram</string>
+      </array>
+    </config-file>
+
     <header-file src="src/ios/CDVInstagramPlugin.h" target-dir="CDVInstagramPlugin" />
     <source-file src="src/ios/CDVInstagramPlugin.m" target-dir="CDVInstagramPlugin" />
   </platform>

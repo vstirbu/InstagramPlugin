@@ -98,4 +98,26 @@ static NSString *InstagramId = @"com.burbn.instagram";
     }
 }
 
+- (UIImage*)saveImage:(UIImage*)image withText:(NSString*)text {
+    CGFloat labelHeight = 30;
+    CGPoint startPoint = CGPointMake(20, image.size.height - labelHeight);
+    UIFont *font = [UIFont boldSystemFontOfSize:17];
+    
+    UIGraphicsBeginImageContext(image.size);
+    [image drawInRect:CGRectMake(0,0,image.size.width,image.size.height)];
+    CGRect rect = CGRectMake(startPoint.x, startPoint.y, image.size.width, labelHeight);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0);
+    CGContextStrokeRectWithWidth(context, CGRectMake(0, image.size.height - labelHeight, rect.size.width, rect.size.height), labelHeight);
+    
+    
+    [[UIColor blackColor] set];
+    [text drawInRect:CGRectIntegral(rect) withFont:font];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
 @end

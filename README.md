@@ -3,6 +3,8 @@
 By [Vlad Stirbu](https://github.com/vstirbu).
 
 Adds ability to share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.
+__UPDATED__
+Now accepts the URL of an image and bakes the caption onto the image before opening in Instagram.
 
 [![GitHub version](https://badge.fury.io/gh/vstirbu%2FInstagramPlugin.png)](http://badge.fury.io/gh/vstirbu%2FInstagramPlugin) [![Stories in Ready](https://badge.waffle.io/vstirbu/instagramplugin.png?label=ready)](https://waffle.io/vstirbu/instagramplugin)
 [![Join the chat at https://gitter.im/vstirbu/InstagramPlugin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vstirbu/InstagramPlugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -35,7 +37,8 @@ Instagram.isInstalled(function (err, installed) {
 });
 ```
 
-Share the content of a canvas element or a base64 dataURL __png__ image. The function share accepts a string, corresponding to the canvas element id or the dataURL, an optional caption, and a callback function as parameters:
+__CHANGED FUNCTIONALITY FROM ORIGINAL__
+Share the content of an image URL. The function share accepts a string, corresponding to the URL of the image, an optional caption to bake onto the image, and a callback function as parameters:
 
 __API CHANGE NOTE__: [Instagram](http://developers.instagram.com/post/125972775561/removing-pre-filled-captions-from-mobile-sharing) app stopped accepting pre-filled captions on both iOS and Android. As a work-around, the caption is copied to the clipboard. You have to inform your users to paste the caption.
 

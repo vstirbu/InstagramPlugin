@@ -1,26 +1,26 @@
 /*
-    The MIT License (MIT)
-    Copyright (c) 2013 - 2014 Vlad Stirbu
-    
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-    
-    The above copyright notice and this permission notice shall be
-    included in all copies or substantial portions of the Software.
-    
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
+ The MIT License (MIT)
+ Copyright (c) 2013 - 2014 Vlad Stirbu
+ 
+ Permission is hereby granted, free of charge, to any person obtaining
+ a copy of this software and associated documentation files (the
+ "Software"), to deal in the Software without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish,
+ distribute, sublicense, and/or sell copies of the Software, and to
+ permit persons to whom the Software is furnished to do so, subject to
+ the following conditions:
+ 
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
 #import <Cordova/CDV.h>
 #import "CDVInstagramPlugin.h"
@@ -60,7 +60,7 @@ static NSString *InstagramId = @"com.burbn.instagram";
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
         NSLog(@"open in instagram");
         
-        NSData *imageObj = [NSData dataFromBase64String:objectAtIndex0];
+        NSData* imageObj = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:objectAtIndex0]];
         UIImage* image = [UIImage imageWithData:imageObj];
         image = [self saveImage:image withText:caption];
         imageObj = UIImagePNGRepresentation(image);
@@ -103,17 +103,34 @@ static NSString *InstagramId = @"com.burbn.instagram";
 }
 
 - (UIImage*)saveImage:(UIImage*)image withText:(NSString*)text {
+    
+    double minSide = MIN(image.size.width, image.size.height);
+    CGSize size = CGSizeMake(minSide, minSide);
+    
+    double refWidth = CGImageGetWidth(image.CGImage);
+    double refHeight = CGImageGetHeight(image.CGImage);
+    
+    double x = (refWidth - size.width) / 2.0;
+    double y = (refHeight - size.height) / 2.0;
+    
+    CGRect cropRect = CGRectMake(x, y, size.height, size.width);
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
+    
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef scale:0.0 orientation:image.imageOrientation];
+    CGImageRelease(imageRef);
+    
+    
     CGFloat labelHeight = 30;
-    CGPoint startPoint = CGPointMake(20, image.size.height - labelHeight);
+    CGPoint startPoint = CGPointMake(20, minSide - labelHeight);
     UIFont *font = [UIFont boldSystemFontOfSize:17];
     
-    UIGraphicsBeginImageContext(image.size);
-    [image drawInRect:CGRectMake(0,0,image.size.width,image.size.height)];
-    CGRect rect = CGRectMake(startPoint.x, startPoint.y, image.size.width, labelHeight);
+    UIGraphicsBeginImageContext(CGSizeMake(minSide, minSide));
+    [cropped drawInRect:CGRectMake(0,0,minSide,minSide)];
+    CGRect rect = CGRectMake(startPoint.x, startPoint.y, minSide, labelHeight);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0);
-    CGContextStrokeRectWithWidth(context, CGRectMake(0, image.size.height - labelHeight, rect.size.width, rect.size.height), labelHeight);
+    CGContextStrokeRectWithWidth(context, CGRectMake(0, minSide - labelHeight, rect.size.width, rect.size.height), labelHeight);
     
     
     [[UIColor blackColor] set];

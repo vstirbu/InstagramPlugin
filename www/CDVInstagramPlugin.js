@@ -83,19 +83,8 @@ var Plugin = {
       return callback && callback("oops, Instagram is not installed ... ");
     }
 
-    var canvas = document.getElementById(data),
-        magic = "data:image";
-
-    if (canvas) {
-      shareDataUrl(canvas.toDataURL(), caption, callback);
-    }
-    else if (data.slice(0, magic.length) == magic) {
-      shareDataUrl(data, caption, callback);
-    }
-    else
-    {
-      console.log("oops, Instagram image data string has to start with 'data:image'.")
-    }
+    // Expect the image url
+    shareDataUrl(data, caption, callback);
   }
 };
 

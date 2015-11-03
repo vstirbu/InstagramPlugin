@@ -120,25 +120,55 @@ static NSString *InstagramId = @"com.burbn.instagram";
     CGImageRelease(imageRef);
     
     
-    CGFloat labelHeight = 30;
-    CGPoint startPoint = CGPointMake(20, minSide - labelHeight);
-    UIFont *font = [UIFont boldSystemFontOfSize:17];
+    CGSize labelSize = CGSizeMake(minSide - 40, 30);
+    CGPoint startPoint = CGPointMake(20, minSide - labelSize.height);
     
+    // Draw it
     UIGraphicsBeginImageContext(CGSizeMake(minSide, minSide));
     [cropped drawInRect:CGRectMake(0,0,minSide,minSide)];
-    CGRect rect = CGRectMake(startPoint.x, startPoint.y, minSide, labelHeight);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetRGBStrokeColor(context, 1.0, 1.0, 1.0, 1.0);
-    CGContextStrokeRectWithWidth(context, CGRectMake(0, minSide - labelHeight, rect.size.width, rect.size.height), labelHeight);
+    CGContextStrokeRectWithWidth(context, CGRectMake(0, minSide - labelSize.height, minSide, labelSize.height), labelSize.height);
     
-    
+    // Center the label
+    UIFont *font = [self fontToFitInSize:labelSize forText:text];
+    CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName: font}];
+    startPoint = CGPointMake((minSide - textSize.width) / 2, (minSide - labelSize.height));
+    CGRect rect = CGRectMake(startPoint.x, startPoint.y, textSize.width, textSize.height);
     [[UIColor blackColor] set];
-    [text drawInRect:CGRectIntegral(rect) withFont:font];
+    //    CGContextStrokeRectWithWidth(context, rect, labelSize.height);
+    [text drawInRect:rect withFont:font];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
     return newImage;
+}
+
+- (UIFont*)fontToFitInSize:(CGSize)size forText:(NSString*)text {
+    CGFloat baseFont = 0;
+    UIFont* myFont = [UIFont systemFontOfSize:baseFont];
+    CGSize fSize = [text sizeWithFont:myFont];
+    CGFloat step = 0.1f;
+    
+    BOOL stop = NO;
+    CGFloat previousH;
+    while (!stop) {
+        myFont = [UIFont systemFontOfSize:baseFont + step ];
+        fSize = [text sizeWithFont:myFont constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+        CGFloat pad = myFont.lineHeight / 3;
+        if (fSize.height + pad > size.height ||
+            fSize.width + pad > size.width) {
+            myFont = [UIFont systemFontOfSize:previousH];
+            fSize = CGSizeMake(fSize.width, previousH);
+            stop = YES;
+        } else {
+            previousH = baseFont+step;
+        }
+        
+        step++;
+    }
+    return myFont;
 }
 
 @end

@@ -60,7 +60,7 @@ static NSString *InstagramId = @"com.burbn.instagram";
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
         NSLog(@"open in instagram");
         
-        NSData *imageObj = [NSData dataFromBase64String:objectAtIndex0];
+        NSData *imageObj = [[NSData alloc] initWithBase64EncodedString:objectAtIndex0 options:0];
         NSString *tmpDir = NSTemporaryDirectory();
         NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
         

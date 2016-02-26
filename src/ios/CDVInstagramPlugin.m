@@ -80,6 +80,32 @@ static NSString *InstagramId = @"com.burbn.instagram";
     }
 }
 
+- (void)shareCameraRollAsset:(CDVInvokedUrlCommand*)command {
+    self.callbackId = command.callbackId;
+    NSString    *assetPath = [command argumentAtIndex:0];
+    NSString    *caption = [command argumentAtIndex:1];
+    
+    CDVPluginResult *result;
+    
+    NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
+    if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
+        NSLog(@"open camera roll asset in instagram");
+        
+		NSString *escapedAssetPath = [assetPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+		NSString *escapedCaption   = [caption stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+		NSURL *instagramShareURL   = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?AssetPath=%@&InstagramCaption=%@", escapedAssetPath, escapedCaption]];
+		
+		[[UIApplication sharedApplication] openURL:instagramShareURL];
+
+		result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+        
+    } else {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+    }
+}
+
 - (void) documentInteractionController: (UIDocumentInteractionController *) controller willBeginSendingToApplication: (NSString *) application {
     if ([application isEqualToString:InstagramId]) {
         self.toInstagram = TRUE;

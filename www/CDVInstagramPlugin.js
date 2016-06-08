@@ -97,42 +97,13 @@ var Plugin = {
       console.log("oops, Instagram image data string has to start with 'data:image'.")
     }
   },
-  shareCameraRollAsset: function () {
-      var assetPath,
-          caption,
-          callback;
-
-      switch (arguments.length) {
-          case 2:
-              assetPath = arguments[0];
-              caption = '';
-              callback = arguments[1];
-              break;
-          case 3:
-              assetPath = arguments[0];
-              caption = arguments[1];
-              callback = arguments[2];
-              break;
-          default:
-      }
-
+  shareAsset: function (successCallback, errorCallback, assetLocalIdentifier) {
       // sanity check
       if (hasCheckedInstall && !isAppInstalled) {
           console.log("oops, Instagram is not installed ... ");
-          return callback && callback("oops, Instagram is not installed ... ");
+          return errorCallback && errorCallback("oops, Instagram is not installed ... ");
       }
-
-      exec(function () {
-          if (cordova && cordova.plugins && cordova.plugins.clipboard && caption !== '') {
-              cordova.plugins.clipboard.copy(caption);
-          }
-
-          callback && callback(null, true);
-      },
-
-      function (err) {
-          callback && callback(err);
-      }, "Instagram", "shareCameraRollAsset", [assetPath, caption]);
+      exec(successCallback, errorCallback, "Instagram", "shareAsset", [assetLocalIdentifier]);
   }
 };
 

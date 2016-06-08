@@ -80,20 +80,18 @@ static NSString *InstagramId = @"com.burbn.instagram";
     }
 }
 
-- (void)shareCameraRollAsset:(CDVInvokedUrlCommand*)command {
+- (void)shareAsset:(CDVInvokedUrlCommand*)command {
     self.callbackId = command.callbackId;
-    NSString    *assetPath = [command argumentAtIndex:0];
-    NSString    *caption = [command argumentAtIndex:1];
+    NSString    *localIdentifier = [command argumentAtIndex:0];
     
     CDVPluginResult *result;
     
     NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
-        NSLog(@"open camera roll asset in instagram");
+        NSLog(@"open asset in instagram");
         
-		NSString *escapedAssetPath = [assetPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-		NSString *escapedCaption   = [caption stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-		NSURL *instagramShareURL   = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?AssetPath=%@&InstagramCaption=%@", escapedAssetPath, escapedCaption]];
+		NSString *localIdentifierEscaped = [localIdentifier stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+		NSURL *instagramShareURL   = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=%@", localIdentifierEscaped]];
 		
 		[[UIApplication sharedApplication] openURL:instagramShareURL];
 

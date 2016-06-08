@@ -34,6 +34,6 @@
 
 - (void)isInstalled:(CDVInvokedUrlCommand*)command;
 - (void)share:(CDVInvokedUrlCommand*)command;
-- (void)shareCameraRollAsset:(CDVInvokedUrlCommand*)command;
+- (void)shareAsset:(CDVInvokedUrlCommand*)command;
 
 @end

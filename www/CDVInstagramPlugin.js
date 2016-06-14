@@ -96,6 +96,14 @@ var Plugin = {
     {
       console.log("oops, Instagram image data string has to start with 'data:image'.")
     }
+  },
+  shareAsset: function (successCallback, errorCallback, assetLocalIdentifier) {
+      // sanity check
+      if (hasCheckedInstall && !isAppInstalled) {
+          console.log("oops, Instagram is not installed ... ");
+          return errorCallback && errorCallback("oops, Instagram is not installed ... ");
+      }
+      exec(successCallback, errorCallback, "Instagram", "shareAsset", [assetLocalIdentifier]);
   }
 };
 

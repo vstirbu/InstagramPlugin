@@ -80,6 +80,30 @@ static NSString *InstagramId = @"com.burbn.instagram";
     }
 }
 
+- (void)shareAsset:(CDVInvokedUrlCommand*)command {
+    self.callbackId = command.callbackId;
+    NSString    *localIdentifier = [command argumentAtIndex:0];
+    
+    CDVPluginResult *result;
+    
+    NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
+    if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
+        NSLog(@"open asset in instagram");
+        
+		NSString *localIdentifierEscaped = [localIdentifier stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+		NSURL *instagramShareURL   = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=%@", localIdentifierEscaped]];
+		
+		[[UIApplication sharedApplication] openURL:instagramShareURL];
+
+		result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+        
+    } else {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+    }
+}
+
 - (void) documentInteractionController: (UIDocumentInteractionController *) controller willBeginSendingToApplication: (NSString *) application {
     if ([application isEqualToString:InstagramId]) {
         self.toInstagram = TRUE;

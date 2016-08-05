@@ -63,7 +63,7 @@ public class CDVInstagramPlugin extends CordovaPlugin {
 		
         if (action.equals("share")) {
             String imageString = args.getString(0);
-            String captionString = args.getString(1);
+            String captionString = (args.getString(1) == "null") ? "" : args.getString(1);
             this.share(imageString, captionString);
             return true;
         } else if (action.equals("isInstalled")) {

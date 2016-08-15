@@ -27,7 +27,12 @@ var exec = require('cordova/exec');
 var hasCheckedInstall,
     isAppInstalled;
 
-function shareDataUrl(dataUrl, caption, callback) {
+function shareDataUrl(dataUrl, caption, successCallback, errorCallback) {
+  if(typeof caption == 'Function') {
+      errorCallback = successCallback;
+      successCallback = caption;
+      caption = '';
+  }
   var imageData = dataUrl.replace(/data:image\/(png|jpeg);base64,/, "");
 
   exec(function () {
@@ -35,11 +40,11 @@ function shareDataUrl(dataUrl, caption, callback) {
       cordova.plugins.clipboard.copy(caption);
     }
 
-    callback && callback(null, true);
+    successCallback && successCallback();
   },
 
   function (err) {
-    callback && callback(err);
+    errorCallback && errorCallback(err);
   }, "Instagram", "share", [imageData, caption]);
 }
 
@@ -49,13 +54,13 @@ var Plugin = {
     exec(function (version) {
       hasCheckedInstall = true;
       isAppInstalled = true;
-      callback && callback(null, version ? version : true);
+      callback && callback(true, version);
     },
 
     function () {
       hasCheckedInstall = true;
       isAppInstalled = false;
-      callback && callback(null, false);
+      callback && callback(false);
     }, "Instagram", "isInstalled", []);
   },
   share: function () {

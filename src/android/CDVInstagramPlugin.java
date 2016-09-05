@@ -32,6 +32,8 @@ import java.io.IOException;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
+import org.apache.cordova.PluginResult.Status;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -64,6 +66,10 @@ public class CDVInstagramPlugin extends CordovaPlugin {
         if (action.equals("share")) {
             String imageString = args.getString(0);
             String captionString = args.getString(1);
+
+            PluginResult result = new PluginResult(Status.NO_RESULT);
+            result.setKeepCallback(true);
+
             this.share(imageString, captionString);
             return true;
         } else if (action.equals("isInstalled")) {

@@ -74,9 +74,9 @@ You can get a LocalIdentifier by using Photos Framework [Fetching Assets](https:
 
 A very basic application that uses the plugin can be found [here](https://github.com/vstirbu/instagramplugin-example).
 
-### AngularJS
+### AngularJS/Ionic
 
-The plugin is included in [ngCordova](http://ngcordova.com/docs/plugins/instagram/).
+The plugin is included in [ngCordova](http://ngcordova.com/docs/plugins/instagram/) and [ionic-native](https://github.com/driftyco/ionic-native).
 
 ### Quirks:
 

@@ -51,6 +51,11 @@
       </array>
     </config-file>
 
+    <!-- iOS 10 now asks developers to declare access to any user private data -->
+    <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+      <string></string>
+    </config-file>
+
     <header-file src="src/ios/CDVInstagramPlugin.h" target-dir="CDVInstagramPlugin" />
     <source-file src="src/ios/CDVInstagramPlugin.m" target-dir="CDVInstagramPlugin" />
   </platform>

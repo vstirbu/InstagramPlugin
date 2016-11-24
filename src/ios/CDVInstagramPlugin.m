@@ -22,6 +22,8 @@
     WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#import <AssetsLibrary/AssetsLibrary.h>
+
 #import <Cordova/CDV.h>
 #import "CDVInstagramPlugin.h"
 
@@ -48,6 +50,7 @@ static NSString *InstagramId = @"com.burbn.instagram";
     
 }
 
+/*
 - (void)share:(CDVInvokedUrlCommand*)command {
     self.callbackId = command.callbackId;
     self.toInstagram = FALSE;
@@ -78,6 +81,29 @@ static NSString *InstagramId = @"com.burbn.instagram";
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
         [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     }
+}
+*/
+
+- (void)share:(CDVInvokedUrlCommand*)command {
+    self.callbackId = command.callbackId;
+
+    NSString *objectAtIndex0 = [command argumentAtIndex:0];
+    NSData *imageObj = [[NSData alloc] initWithBase64EncodedString:objectAtIndex0 options:0];
+        
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        
+    [library writeImageDataToSavedPhotosAlbum:imageObj metadata:nil completionBlock:^(NSURL *assetURL, NSError *error) {
+        NSURL *instagramURL = [NSURL URLWithString:
+                               [NSString stringWithFormat:@"instagram://library?AssetPath=%@",
+                                [[assetURL absoluteString] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]]]];
+        
+        if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
+            [[UIApplication sharedApplication] openURL:instagramURL];
+        } else {
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
+            [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+        }
+    }];
 }
 
 - (void)shareAsset:(CDVInvokedUrlCommand*)command {

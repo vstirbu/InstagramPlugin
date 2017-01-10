@@ -120,11 +120,11 @@ public class CDVInstagramPlugin extends CordovaPlugin {
         	
         	Intent shareIntent = new Intent(Intent.ACTION_SEND);
         	shareIntent.setType("image/*");
-        	shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file));
+        	shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
         	shareIntent.putExtra(Intent.EXTRA_TEXT, captionString);
         	shareIntent.setPackage("com.instagram.android");
         	
-        	this.cordova.startActivityForResult((CordovaPlugin) this, shareIntent, 12345);
+        	this.cordova.startActivityForResult((CordovaPlugin) this, Intent.createChooser(shareIntent, "Share to"), 12345);
         	
         } else {
             this.cbContext.error("Expected one non-empty string argument.");

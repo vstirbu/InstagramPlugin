@@ -30,17 +30,19 @@ var hasCheckedInstall,
 function shareDataUrl(dataUrl, caption, callback) {
   var imageData = dataUrl.replace(/data:image\/(png|jpeg);base64,/, "");
 
-  exec(function () {
     if (cordova && cordova.plugins && cordova.plugins.clipboard && caption !== '') {
+      console.log("copying caption: ", caption);
       cordova.plugins.clipboard.copy(caption);
     }
 
-    callback && callback(null, true);
-  },
-
-  function (err) {
-    callback && callback(err);
-  }, "Instagram", "share", [imageData, caption]);
+    exec(
+        function () {
+            callback && callback(null, true);
+        },
+        function (err) {
+            callback && callback(err);
+        }, "Instagram", "share", [imageData, caption]
+    );
 }
 
 var Plugin = {

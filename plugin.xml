@@ -11,8 +11,8 @@
   <license>MIT</license>
 
   <dependency
-    id="com.verso.cordova.clipboard"
-    url="https://github.com/VersoSolutions/CordovaClipboard.git">
+    id="cordova-universal-clipboard"
+    url="https://github.com/Visigo/CordovaClipboard.git">
   </dependency>
 
   <js-module src="www/CDVInstagramPlugin.js" name="InstagramPlugin">

@@ -61,7 +61,7 @@ Instagram.share(canvasIdOrDataUrl, function (err) {
 });
 ```
 
-Share library __asset__ image or video. The function shareAsset accepts a string with asset local identifier, and a callback function as parameters:
+Share library __asset__ image or video. The function shareAsset (iOS only) accepts a string with asset local identifier, and a callback function as parameters:
 ```javascript
 var assetLocalIdentifier = "24320B60-1F52-46AC-BE4C-1202F02B9D00/L0/001";
 Instagram.shareAsset(function(result) {

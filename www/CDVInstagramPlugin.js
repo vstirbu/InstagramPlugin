@@ -30,11 +30,6 @@ var hasCheckedInstall,
 function shareDataUrl(dataUrl, caption, callback) {
   var imageData = dataUrl.replace(/^data:(image|application|binary)\/.*;base64,/, "");
 
-    if (cordova && cordova.plugins && cordova.plugins.clipboard && caption !== '') {
-      console.log("copying caption: ", caption);
-      cordova.plugins.clipboard.copy(caption);
-    }
-
     exec(
         function () {
             callback && callback(null, true);

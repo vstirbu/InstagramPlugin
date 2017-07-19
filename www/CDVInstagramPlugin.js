@@ -28,12 +28,7 @@ var hasCheckedInstall,
     isAppInstalled;
 
 function shareDataUrl(dataUrl, caption, callback) {
-  var imageData = dataUrl.replace(/data:image\/(png|jpeg);base64,/, "");
-
-    if (cordova && cordova.plugins && cordova.plugins.clipboard && caption !== '') {
-      console.log("copying caption: ", caption);
-      cordova.plugins.clipboard.copy(caption);
-    }
+  var imageData = dataUrl.replace(/^data:(image|application|binary)\/.*;base64,/, "");
 
     exec(
         function () {
@@ -96,7 +91,7 @@ var Plugin = {
     }
     else
     {
-      console.log("oops, Instagram image data string has to start with 'data:image'.")
+      shareDataUrl(data, caption, callback);
     }
   },
   shareAsset: function (successCallback, errorCallback, assetLocalIdentifier) {

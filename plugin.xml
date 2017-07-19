@@ -10,11 +10,6 @@
 
   <license>MIT</license>
 
-  <dependency
-    id="cordova-universal-clipboard"
-    url="https://github.com/Visigo/CordovaClipboard.git">
-  </dependency>
-
   <js-module src="www/CDVInstagramPlugin.js" name="InstagramPlugin">
         <clobbers target="Instagram" />
   </js-module>
@@ -49,6 +44,11 @@
       <array>
         <string>instagram</string>
       </array>
+    </config-file>
+
+    <!-- iOS 10 now asks developers to declare access to any user private data -->
+    <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+      <string></string>
     </config-file>
 
     <header-file src="src/ios/CDVInstagramPlugin.h" target-dir="CDVInstagramPlugin" />

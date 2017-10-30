@@ -51,6 +51,11 @@
       <string></string>
     </config-file>
 
+    <!-- iOS 11 added new permission for photo access -->
+    <config-file target="*-Info.plist" parent="NSPhotoLibraryAddUsageDescription">
+      <string></string>
+    </config-file>
+
     <header-file src="src/ios/CDVInstagramPlugin.h" target-dir="CDVInstagramPlugin" />
     <source-file src="src/ios/CDVInstagramPlugin.m" target-dir="CDVInstagramPlugin" />
   </platform>

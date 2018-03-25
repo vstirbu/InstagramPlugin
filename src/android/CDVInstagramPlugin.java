@@ -119,6 +119,7 @@ public class CDVInstagramPlugin extends CordovaPlugin {
 			}
         	
         	Intent shareIntent = new Intent(Intent.ACTION_SEND);
+		shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         	shareIntent.setType("image/*");
         	shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
         	shareIntent.putExtra(Intent.EXTRA_TEXT, captionString);

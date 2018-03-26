@@ -122,7 +122,7 @@ public class CDVInstagramPlugin extends CordovaPlugin {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("image/*");
 
-            if (Build.VERSION.SDK_INT < 24) {
+            if (Build.VERSION.SDK_INT < 26) {
                 // Handle the file uri with pre Oreo method    
                 shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             } else {

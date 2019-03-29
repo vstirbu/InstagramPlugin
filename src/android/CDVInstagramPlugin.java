@@ -151,10 +151,14 @@ public class CDVInstagramPlugin extends CordovaPlugin {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             Log.v("Instagram", "shared ok");
-            this.cbContext.success();
+            if(this.cbContext != null) {
+                this.cbContext.success();
+            }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             Log.v("Instagram", "share cancelled");
-            this.cbContext.error("Share Cancelled");
+            if(this.cbContext != null) {
+                this.cbContext.error("Share Cancelled");
+            }
         }
     }
 }

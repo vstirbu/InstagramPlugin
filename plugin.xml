@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  id="com.vladstirbu.cordova.instagram"
-  version="0.4.1">
+  id="cordova-instagram-plugin"
+  version="0.5.7">
 
   <name>Instagram</name>
 
   <description>Share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.</description>
 
   <license>MIT</license>
+
+  <dependency
+    id="cordova-universal-clipboard"
+    url="https://github.com/Visigo/CordovaClipboard.git">
+  </dependency>
 
   <js-module src="www/CDVInstagramPlugin.js" name="InstagramPlugin">
         <clobbers target="Instagram" />
@@ -20,6 +25,8 @@
 
   <!-- android -->
   <platform name="android">
+    <framework src="com.android.support:support-v4:26.+" />
+
     <!-- android specific elements -->
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="Instagram">
@@ -27,7 +34,19 @@
        </feature>
     </config-file>
 
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <provider android:authorities="${applicationId}.provider" android:exported="false" android:grantUriPermissions="true" android:name="com.vladstirbu.cordova.plugin.utils.AssetProvider">
+          <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/instagramplugin_provider_paths" />
+        </provider>
+    </config-file>
+
+    <source-file
+            src="src/android/xml/instagramplugin_provider_paths.xml"
+            target-dir="res/xml" />
+
+
     <source-file src="src/android/CDVInstagramPlugin.java" target-dir="src/com/vladstirbu/cordova" />
+    <source-file src="src/android/utils/AssetProvider.java" target-dir="src/com/vladstirbu/cordova" />
   </platform>
 
   <!-- ios -->
@@ -37,6 +56,13 @@
       <feature name="Instagram">
           <param name="ios-package" value="CDVInstagramPlugin"/>
       </feature>
+    </config-file>
+
+    <!-- custom URLs need to be white listed on iOS 9 -->
+    <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+      <array>
+        <string>instagram</string>
+      </array>
     </config-file>
 
     <header-file src="src/ios/CDVInstagramPlugin.h" target-dir="CDVInstagramPlugin" />

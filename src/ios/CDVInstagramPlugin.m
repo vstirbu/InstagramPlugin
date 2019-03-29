@@ -60,7 +60,7 @@ static NSString *InstagramId = @"com.burbn.instagram";
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
         NSLog(@"open in instagram");
         
-        NSData *imageObj = [NSData dataFromBase64String:objectAtIndex0];
+        NSData *imageObj = [[NSData alloc] initWithBase64EncodedString:objectAtIndex0 options:0];
         NSString *tmpDir = NSTemporaryDirectory();
         NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
         
@@ -73,6 +73,30 @@ static NSString *InstagramId = @"com.burbn.instagram";
         }
         self.interactionController .delegate = self;
         [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:self.webView animated:YES];
+        
+    } else {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+    }
+}
+
+- (void)shareAsset:(CDVInvokedUrlCommand*)command {
+    self.callbackId = command.callbackId;
+    NSString    *localIdentifier = [command argumentAtIndex:0];
+    
+    CDVPluginResult *result;
+    
+    NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
+    if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
+        NSLog(@"open asset in instagram");
+        
+		NSString *localIdentifierEscaped = [localIdentifier stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+		NSURL *instagramShareURL   = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=%@", localIdentifierEscaped]];
+		
+		[[UIApplication sharedApplication] openURL:instagramShareURL];
+
+		result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
         
     } else {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];

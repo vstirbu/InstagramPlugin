@@ -78,6 +78,36 @@ A very basic application that uses the plugin can be found [here](https://github
 
 The plugin is included in [ngCordova](http://ngcordova.com/docs/plugins/instagram/) and [ionic-native](https://github.com/driftyco/ionic-native).
 
+__NOTE__: If you are using an image from the server,then you should download the image and fetch  the content using   [readAsDataURL](https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL).
+Example:
+* Add plugin [cordova-plugin-file-transfer](https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-file-transfer)
+```Javascript code
+var url = encodeURI('https://static.pexels.com/photos/33109/fall-autumn-red-season.jpg');
+var filename = 'image.jpg';
+var targetPath = cordova.file.externalRootDirectory + filename;
+$cordovaFileTransfer.download(url, targetPath, {}, true).then(function(result) {
+        var mywallpaper = result.toURL();
+        window.resolveLocalFileSystemURL(mywallpaper, function(fileEntry) {
+            fileEntry.file(function(file) {
+                var reader = new FileReader(),
+                    data = null;
+                reader.onloadend = function(event) {
+                    data = reader.result;
+                    $cordovaInstagram.share(data, '#amazing').then(function(success) {
+                        console.log('shareViaInstagram Success', success);
+                    }, function(err) {
+                        console.log('shareViaInstagram failed', err);
+                    });
+                };
+                reader.readAsDataURL(file)
+            });
+        });
+    },
+    function(error) {},
+    function(progress) {
+});
+```
+
 ### Quirks:
 
 #### Android
@@ -87,7 +117,7 @@ The plugin is included in [ngCordova](http://ngcordova.com/docs/plugins/instagra
 
 #### iOS
 
-* Although the plugin follows the [instructions](http://instagram.com/developer/iphone-hooks/) to show only Instagram in the document interaction controller, there are [reports](https://github.com/vstirbu/InstagramPlugin/issues/23) that other apps appear in the list.
+* Although the plugin follows the [instructions](https://www.instagram.com/developer/mobile-sharing/iphone-hooks/) to show only Instagram in the document interaction controller, there are [reports](https://github.com/vstirbu/InstagramPlugin/issues/23) that other apps appear in the list.
 
 ### Recipes
 

@@ -50,7 +50,7 @@ static NSString *InstagramId = @"com.burbn.instagram";
     
 }
 
-/*
+
 - (void)share:(CDVInvokedUrlCommand*)command {
     self.callbackId = command.callbackId;
     self.toInstagram = FALSE;
@@ -65,12 +65,12 @@ static NSString *InstagramId = @"com.burbn.instagram";
         
         NSData *imageObj = [[NSData alloc] initWithBase64EncodedString:objectAtIndex0 options:0];
         NSString *tmpDir = NSTemporaryDirectory();
-        NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
+        NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.ig"];
         
         [imageObj writeToFile:path atomically:true];
         
         self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
-        self.interactionController .UTI = @"com.instagram.exclusivegram";
+        self.interactionController .UTI = @"com.instagram.photo";
         if (caption) {
             self.interactionController .annotation = @{@"InstagramCaption" : caption};
         }
@@ -82,8 +82,8 @@ static NSString *InstagramId = @"com.burbn.instagram";
         [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     }
 }
-*/
 
+/*
 - (void)share:(CDVInvokedUrlCommand*)command {
     self.callbackId = command.callbackId;
 
@@ -105,7 +105,7 @@ static NSString *InstagramId = @"com.burbn.instagram";
         }
     }];
 }
-
+*/
 - (void)shareAsset:(CDVInvokedUrlCommand*)command {
     self.callbackId = command.callbackId;
     NSString    *localIdentifier = [command argumentAtIndex:0];

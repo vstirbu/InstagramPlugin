@@ -27,6 +27,8 @@
 #import <Cordova/CDV.h>
 #import "CDVInstagramPlugin.h"
 
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+
 static NSString *InstagramId = @"com.burbn.instagram";
 
 @implementation CDVInstagramPlugin
@@ -65,12 +67,19 @@ static NSString *InstagramId = @"com.burbn.instagram";
         
         NSData *imageObj = [[NSData alloc] initWithBase64EncodedString:objectAtIndex0 options:0];
         NSString *tmpDir = NSTemporaryDirectory();
-        NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.ig"];
-        
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"13.0")) {
+            NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
+        } else {
+            NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.ig"];
+        }
         [imageObj writeToFile:path atomically:true];
         
         self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
-        self.interactionController .UTI = @"com.instagram.photo";
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"13.0")) {
+            self.interactionController .UTI = @"com.instagram.photo";
+        } else {
+            self.interactionController .UTI = @"com.instagram.exclusivegram";
+        }
         if (caption) {
             self.interactionController .annotation = @{@"InstagramCaption" : caption};
         }

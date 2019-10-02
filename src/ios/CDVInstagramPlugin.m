@@ -27,7 +27,7 @@
 #import <Cordova/CDV.h>
 #import "CDVInstagramPlugin.h"
 
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define IS_IOS13orHIGHER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 13.0)
 
 static NSString *InstagramId = @"com.burbn.instagram";
 
@@ -67,15 +67,16 @@ static NSString *InstagramId = @"com.burbn.instagram";
         
         NSData *imageObj = [[NSData alloc] initWithBase64EncodedString:objectAtIndex0 options:0];
         NSString *tmpDir = NSTemporaryDirectory();
-        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"13.0")) {
-            NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
+        NSString *path;
+        if (IS_IOS13orHIGHER) {
+            path = [tmpDir stringByAppendingPathComponent:@"instagram.ig"];
         } else {
-            NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.ig"];
+            path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
         }
         [imageObj writeToFile:path atomically:true];
         
         self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
-        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"13.0")) {
+        if (IS_IOS13orHIGHER) {
             self.interactionController .UTI = @"com.instagram.photo";
         } else {
             self.interactionController .UTI = @"com.instagram.exclusivegram";

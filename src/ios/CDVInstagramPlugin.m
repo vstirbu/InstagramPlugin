@@ -62,12 +62,12 @@ static NSString *InstagramId = @"com.burbn.instagram";
         
         NSData *imageObj = [[NSData alloc] initWithBase64EncodedString:objectAtIndex0 options:0];
         NSString *tmpDir = NSTemporaryDirectory();
-        NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
+        NSString *path = [tmpDir stringByAppendingPathComponent:@"instagram.ig"];
         
         [imageObj writeToFile:path atomically:true];
         
         self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
-        self.interactionController .UTI = @"com.instagram.exclusivegram";
+        self.interactionController .UTI = @"com.instagram.photo";
         if (caption) {
             self.interactionController .annotation = @{@"InstagramCaption" : caption};
         }

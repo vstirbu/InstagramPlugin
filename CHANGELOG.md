@@ -1,3 +1,9 @@
+# 0.6.0 / 2020-08-31
+
+- refactor: ♻️ change clipboard plugin to cordova-clipboard
+
+  ✅ Closes: #104 #96 #87
+
 # 0.5.9 / 2020-08-31
 
 - fix sharing on iOS #111

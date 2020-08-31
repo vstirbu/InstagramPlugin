@@ -1,26 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  id="cordova-instagram-plugin"
-  version="0.5.9">
+  xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-instagram-plugin" version="0.5.9">
 
   <name>Instagram</name>
 
-  <description>Share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.</description>
+  <description
+	>Share the content of a canvas element or a dataUrl encoded image using the Instagram application for iOS and Android.</description>
 
   <license>MIT</license>
 
-  <dependency
-    id="cordova-universal-clipboard"
-    url="https://github.com/Visigo/CordovaClipboard.git">
-  </dependency>
+  <dependency id="cordova-clipboard" version="^1.3.0" />
 
   <js-module src="www/CDVInstagramPlugin.js" name="InstagramPlugin">
-        <clobbers target="Instagram" />
+    <clobbers target="Instagram" />
   </js-module>
 
   <engines>
-      <engine name="cordova" version=">=3.0.0" />
+    <engine name="cordova" version=">=3.0.0" />
   </engines>
 
   <!-- android -->
@@ -31,18 +27,16 @@
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="Instagram">
         <param name="android-package" value="com.vladstirbu.cordova.CDVInstagramPlugin" />
-       </feature>
+      </feature>
     </config-file>
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-        <provider android:authorities="${applicationId}.provider" android:exported="false" android:grantUriPermissions="true" android:name="com.vladstirbu.cordova.plugin.utils.AssetProvider">
-          <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/instagramplugin_provider_paths" />
-        </provider>
+      <provider android:authorities="${applicationId}.provider" android:exported="false" android:grantUriPermissions="true" android:name="com.vladstirbu.cordova.plugin.utils.AssetProvider">
+        <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/instagramplugin_provider_paths" />
+      </provider>
     </config-file>
 
-    <source-file
-            src="src/android/xml/instagramplugin_provider_paths.xml"
-            target-dir="res/xml" />
+    <source-file src="src/android/xml/instagramplugin_provider_paths.xml" target-dir="res/xml" />
 
 
     <source-file src="src/android/CDVInstagramPlugin.java" target-dir="src/com/vladstirbu/cordova" />
@@ -54,7 +48,7 @@
     <!-- ios specific elements -->
     <config-file target="config.xml" parent="/*">
       <feature name="Instagram">
-          <param name="ios-package" value="CDVInstagramPlugin"/>
+        <param name="ios-package" value="CDVInstagramPlugin" />
       </feature>
     </config-file>
 

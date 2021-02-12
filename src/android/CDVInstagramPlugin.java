@@ -45,7 +45,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 @TargetApi(Build.VERSION_CODES.FROYO)
 public class CDVInstagramPlugin extends CordovaPlugin {

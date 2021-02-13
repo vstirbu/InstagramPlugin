@@ -1,3 +1,7 @@
+# 0.6.1 / 2021-02-13
+
+- Fix FileProvider paths.
+
 # 0.6.0 / 2020-08-31
 
 - refactor: ♻️ change clipboard plugin to cordova-clipboard

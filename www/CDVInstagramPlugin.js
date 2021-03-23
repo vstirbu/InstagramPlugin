@@ -27,7 +27,7 @@ var exec = require('cordova/exec');
 var hasCheckedInstall,
     isAppInstalled;
 
-function shareDataUrl(dataUrl, caption, callback) {
+function shareDataUrl(dataUrl, caption, callback, mode) {
   var imageData = dataUrl.replace(/data:image\/(png|jpeg);base64,/, "");
 
     if (cordova && cordova.plugins && cordova.plugins.clipboard && caption !== '') {
@@ -41,11 +41,17 @@ function shareDataUrl(dataUrl, caption, callback) {
         },
         function (err) {
             callback && callback(err);
-        }, "Instagram", "share", [imageData, caption]
+        }, "Instagram", "share", [imageData, caption, mode]
     );
 }
 
 var Plugin = {
+  SHARE_MODES: {
+    DEFAULT: 0,
+    IGO: 1,
+    IG: 2,
+    LIBRARY: 3
+  },
   // calls to see if the device has the Instagram app
   isInstalled: function (callback) {
     exec(function (version) {
@@ -63,7 +69,8 @@ var Plugin = {
   share: function () {
     var data,
         caption,
-        callback;
+        callback,
+        mode = this.SHARE_MODES.DEFAULT; // existing code will continue to function as normal. But users can "opt in" to use mode 1,2 or 3.
 
     switch(arguments.length) {
     case 2:
@@ -76,6 +83,12 @@ var Plugin = {
       caption = arguments[1];
       callback = arguments[2];
       break;
+    case 4:
+        data = arguments[0];
+        caption = arguments[1];
+        callback = arguments[2];
+        mode = arguments[3];
+        break;
     default:
     }
 
@@ -89,10 +102,10 @@ var Plugin = {
         magic = "data:image";
 
     if (canvas) {
-      shareDataUrl(canvas.toDataURL(), caption, callback);
+      shareDataUrl(canvas.toDataURL(), caption, callback, mode);
     }
     else if (data.slice(0, magic.length) == magic) {
-      shareDataUrl(data, caption, callback);
+      shareDataUrl(data, caption, callback, mode);
     }
     else
     {

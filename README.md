@@ -73,6 +73,28 @@ You can get a LocalIdentifier by using Photos Framework [Fetching Assets](https:
 
 A very basic application that uses the plugin can be found [here](https://github.com/vstirbu/instagramplugin-example).
 
+Additionally for IOS only, you can utilize a fourth parameter on the base64/canvas method `share`, to correspond with a mode:
+```
+console.log(Instagram.SHARE_MODES);
+> {
+    DEFAULT: 0, // original plugin logistics, where it checks for IOS Version 13+ to switch from IG to IGO mode. 
+    IGO: 1, // legacy UTI for instagram DI  (.exclusivegram)
+    IG: 2,  // new UTI for instagram DI  (.photo)
+    LIBRARY: 3 // save base64 or canvas to disk jpg, copy it to the Library, so that it can then be shared via App Intent
+}
+```
+Using above as definition, you can change your code as such (note the usage of a blank caption, to specify 4 total arguments, not 3): 
+```
+var caption = ''; // copied to clipboard by Cordova js. Instagram doesn't support feeding it anymore. 
+Instagram.share(canvasIdOrDataUrl, caption, function (err) {
+    if (err) {
+        console.log("not shared");
+    } else {
+        console.log("shared");
+    }
+}, Instagram.SHARE_MODES.LIBRARY);
+```
+
 ### AngularJS/Ionic
 
 The plugin is included in [ngCordova](http://ngcordova.com/docs/plugins/instagram/) and [ionic-native](https://github.com/driftyco/ionic-native).

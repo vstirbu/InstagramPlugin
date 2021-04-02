@@ -1,3 +1,7 @@
+# 0.6.2 / 2021-04-02
+
+- Fix iOS bug
+
 # 0.6.1 / 2021-02-13
 
 - Fix FileProvider paths.

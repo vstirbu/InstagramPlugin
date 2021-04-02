@@ -24,10 +24,26 @@
 
 #import <Cordova/CDV.h>
 #import "CDVInstagramPlugin.h"
+#import <Photos/Photos.h>
 
+#define IOS_VERSION ([[[UIDevice currentDevice] systemVersion] floatValue])
 #define IS_IOS13orHIGHER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 13.0)
+#define IS_IOS142orHIGHER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 14.2)
 
 static NSString *InstagramId = @"com.burbn.instagram";
+
+typedef NS_ENUM(NSUInteger, LOGIC_MODE) {
+    LM_DEFAULT = 0,
+    LM_IGO,
+    LM_IG,
+    LM_LIBRARY
+};
+typedef NS_ENUM(NSUInteger, ERROR_CODE) {
+    EC_INSTAGRAM_INACCESSIBLE = 1,
+    EC_OTHER_APP_LAUNCHED,
+    EC_APP_INTENT_LAUNCH_FAILURE,
+    EC_APP_INTENT_GENERAL_FAILURE
+};
 
 @implementation CDVInstagramPlugin
 
@@ -39,6 +55,8 @@ static NSString *InstagramId = @"com.burbn.instagram";
     self.callbackId = command.callbackId;
     CDVPluginResult *result;
     
+    NSLog(@"IOS Version: %f", IOS_VERSION);
+
     NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -55,8 +73,9 @@ static NSString *InstagramId = @"com.burbn.instagram";
     self.toInstagram = FALSE;
     NSString    *objectAtIndex0 = [command argumentAtIndex:0];
     NSString    *caption = [command argumentAtIndex:1];
+    NSNumber    *mode = [command argumentAtIndex:2];
     
-    CDVPluginResult *result;
+    __block CDVPluginResult *result;
     
     NSURL *instagramURL = [NSURL URLWithString:@"instagram://app"];
     if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
@@ -64,32 +83,104 @@ static NSString *InstagramId = @"com.burbn.instagram";
         
         NSData *imageObj = [[NSData alloc] initWithBase64EncodedString:objectAtIndex0 options:0];
         NSString *tmpDir = NSTemporaryDirectory();
-        
         NSString *path;
-        if (IS_IOS13orHIGHER) {
+        NSString *uti;
+
+        if (mode.intValue == LM_DEFAULT) {
+            if (IS_IOS13orHIGHER) {
+                path = [tmpDir stringByAppendingPathComponent:@"instagram.ig"];
+                uti = @"com.instagram.photo";
+            } else {
+                path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
+                uti = @"com.instagram.exclusivegram";
+            }
+            NSLog(@"Using DEFAULT logic mode: %@", path);
+        }
+        else if (mode.intValue == LM_IG) {
             path = [tmpDir stringByAppendingPathComponent:@"instagram.ig"];
-        } else {
+            uti = @"com.instagram.photo";
+        }
+        else if (mode.intValue == LM_IGO) {
             path = [tmpDir stringByAppendingPathComponent:@"instagram.igo"];
+            uti = @"com.instagram.exclusivegram";
+        }
+        else {
+            NSString *fileName;
+            fileName = @"cordova-instagram.jpg"; // todo: perhaps a random hash would be better.
+            path = [tmpDir stringByAppendingPathComponent:fileName];
         }
 
+        NSLog(@"Saving temporary file under app specific folder: %@", path);
         [imageObj writeToFile:path atomically:true];
-        
-        self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
 
-        if (IS_IOS13orHIGHER) {
-            self.interactionController .UTI = @"com.instagram.photo";
+        if (mode.intValue != LM_LIBRARY) {
+            NSLog(@"launching with Document Interaction UTI");
+            self.interactionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:path]];
+
+            // not sure why this is here. It doesn't work and is pointless. Posterity?
+            if (caption) {
+                self.interactionController .annotation = @{@"InstagramCaption" : caption};
+            }
+
+            self.interactionController .UTI = uti;
+            self.interactionController .delegate = self;
+            if ([self.interactionController presentOpenInMenuFromRect:CGRectZero inView:self.webView animated:YES]){
+                NSLog(@"menu is presented");
+            }
         } else {
-            self.interactionController .UTI = @"com.instagram.exclusivegram";
-        }
+            NSLog(@"Attempting to save to library, read as a PHAsset for it's localidentifier, and launch using App Intent.");
+            UIImage *image = [UIImage imageWithContentsOfFile:path];
+            
+            __block NSString* localId;
 
-        if (caption) {
-            self.interactionController .annotation = @{@"InstagramCaption" : caption};
+            // Add it to the photo library
+            NSLog(@"Sharing to library now..");
+            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                PHAssetChangeRequest *assetChangeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+                localId = [[assetChangeRequest placeholderForCreatedAsset] localIdentifier];
+            } completionHandler:^(BOOL success, NSError *error) {
+                if (!success) {
+                    NSLog(@"Error creating asset: %@", error);
+                } else {
+                    @try {
+                        NSString *localIdentifierEscaped = [localId stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+		                NSURL *instagramShareURL   = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://library?LocalIdentifier=%@", localIdentifierEscaped]];
+                        NSLog(@"Opening %@, using intent: %@", localId, instagramShareURL);
+
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [[UIApplication sharedApplication] openURL:instagramShareURL options:@{} completionHandler:^(BOOL success) {
+                                if (success) {
+                                    NSLog(@"Successfully opened instagram");
+
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+                                        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+                                    });
+                                }
+                                else {
+                                    NSLog(@"Failed to open instagram");
+
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:EC_APP_INTENT_LAUNCH_FAILURE];
+                                        [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+                                    });
+                                }
+                            }];
+                        });
+                    }
+                    @catch(id anException) {
+                        NSLog(@"Failed to open due to: %@", anException);
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:EC_APP_INTENT_GENERAL_FAILURE];
+                            [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
+                        });
+                    }
+                }
+            }];
+            
         }
-        self.interactionController .delegate = self;
-        [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:self.webView animated:YES];
-        
     } else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:EC_INSTAGRAM_INACCESSIBLE];
         [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     }
 }
@@ -113,12 +204,13 @@ static NSString *InstagramId = @"com.burbn.instagram";
         [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
         
     } else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:1];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:EC_INSTAGRAM_INACCESSIBLE];
         [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     }
 }
 
 - (void) documentInteractionController: (UIDocumentInteractionController *) controller willBeginSendingToApplication: (NSString *) application {
+    NSLog(@"willBeginSendingToApplication");
     if ([application isEqualToString:InstagramId]) {
         self.toInstagram = TRUE;
     }
@@ -126,12 +218,14 @@ static NSString *InstagramId = @"com.burbn.instagram";
 
 - (void) documentInteractionControllerDidDismissOpenInMenu: (UIDocumentInteractionController *) controller {
     CDVPluginResult *result;
+
+    NSLog(@"documentInteractionControllerDidDismissOpenInMenu");
     
     if (self.toInstagram) {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     } else {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:2];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageToErrorObject:EC_OTHER_APP_LAUNCHED];
         [self.commandDelegate sendPluginResult:result callbackId: self.callbackId];
     }
 }
